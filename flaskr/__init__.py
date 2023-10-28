@@ -1,7 +1,6 @@
-import os
-
-from flask import Flask
-
+from flask import (
+    Flask
+)
 
 def create_app(test_config=None):
     # create and configure the app
@@ -17,5 +16,9 @@ def create_app(test_config=None):
     @app.route('/hello')
     def hello():
         return 'Hello, World!'
+
+    from . import home, pm
+    app.register_blueprint(home.bp)
+    app.register_blueprint(pm.bp)
 
     return app

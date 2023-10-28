@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Pattern Matching Using Flask</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='root.css') }}">
+</head>
+
+<body>
+    <h1>Pattern Matching</h1>
+    <form>
+        <div id="input-div">
+            <label for="data">Data</label><br>
+            <input type="text" name="data" id="data"><br>
+        </div>
+        <br>
+        <div id="input-div">
+            <label for="sequence">Sequence</label><br>
+            <input type="text" name="sequence" id="sequence"><br>
+        </div>
+        <br>
+        <button id="form-button" type="submit" value="Submit" method="POST">Search</button>
+    </form>
+</body>
+
+</html>
