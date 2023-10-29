@@ -1,6 +1,8 @@
 from flask import Blueprint, Response, request, json
-from src.dto.regex_dto import RegexDto
 from http import HTTPStatus
+
+from src.dto.regex_dto import RegexDto
+from src.service.regex import regexService
 
 regex = Blueprint("regex", __name__)
 
@@ -24,10 +26,13 @@ def handle_search() -> Response:
                 status=HTTPStatus.BAD_REQUEST,
                 mimetype='application/json'
             )
-        else:
-            return Response(
-                response=json.dumps(data),
-                status=200,
-                mimetype='application/json'
-            )
+
+        service = regexService()
+        print(service.PatternSearch(dto))
+
+        return Response(
+            response=json.dumps(data),
+            status=200,
+            mimetype='application/json'
+        )
 

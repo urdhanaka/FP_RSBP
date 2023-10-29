@@ -16,6 +16,3 @@ class RegexDto:
             return False
         else:
             return True
-
-    def test(self):
-        print(self.data, " ", self.sequence)
