@@ -36,7 +36,7 @@ def handle_search() -> Response:
 
 
 @regex.route("ssr", methods=["POST"])
-def handle_ssr() -> Response:
+def handle_ssr_new() -> Response:
     data = request.json
     dto = SSRDTO(data)
 
@@ -61,6 +61,30 @@ def handle_ssr() -> Response:
                     "6": response_data.result["6"],
                 },
             },
+        ),
+        status=200,
+        mimetype="application/json",
+    )
+
+
+@regex.route("ssr_new", methods=["POST"])
+def handle_ssr() -> Response:
+    data = request.json
+    dto = SSRDTO(data)
+
+    if dto.is_valid() == False:
+        return Response(
+            response=json.dumps({"status": "request not satisfied"}),
+            status=HTTPStatus.BAD_REQUEST,
+            mimetype="application/json",
+        )
+
+    service = regexService()
+    response_data = service.PatternSSRSearch(dto)
+
+    return Response(
+        response=json.dumps(
+            {"res": response_data},
         ),
         status=200,
         mimetype="application/json",

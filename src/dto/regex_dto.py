@@ -19,12 +19,17 @@ class RegexDTO:
 class SSRDTO:
     def __init__(self, json) -> None:
         self.sequence = ""
+        self.pattern = []
 
         if "sequence" in json:
             self.sequence = json["sequence"]
 
+        if "pattern" in json:
+            for pattern in json["pattern"]:
+                self.pattern.append(pattern)
+
     def is_valid(self) -> bool:
-        if self.sequence == "":
+        if self.sequence == "" or self.pattern == []:
             return False
 
         return True

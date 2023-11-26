@@ -23,6 +23,7 @@ class regexService(Interface):
         else:
             print(f"Motif '{sequence}' not found in the DNA sequence.")
 
+    # temp, might delete soon
     def SSRSearch(self, dto: SSRDTO):
         def ssrPatternSearch(sequence: str, length: int) -> list[Any]:
             pattern = rf"(\w{{{length},{length}}})(?:\1)+"
@@ -42,3 +43,18 @@ class regexService(Interface):
         resp.result = resultDict
 
         return resp
+
+    def PatternSSRSearch(self, dto: SSRDTO):
+        def ssrPatternSearch(sequence: str, pattern: str):
+            matches = re.findall(pattern, sequence)
+
+            return matches
+
+        sequence = dto.sequence
+        resultList = []
+
+        for pattern in dto.pattern:
+            res = ssrPatternSearch(sequence, pattern)
+            resultList.append(res)
+
+        return resultList
