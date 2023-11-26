@@ -1,16 +1,18 @@
 import re
-from src.dto.regex_dto import RegexDto, SSRDto
+from typing import Any
+from src.dto.regex_dto import SSRDTO, RegexDTO, ResponseSSRDTO
 
 
 class Interface:
-    def PatternSearch(self, _: RegexDto):
+    def PatternSearch(self, _: RegexDTO):
         pass
 
-    def SSRPatternSearch(self, _: SSRDto):
+    def SSRSearch(self, _: SSRDTO):
         pass
+
 
 class regexService(Interface):
-    def PatternSearch(self, dto: RegexDto):
+    def PatternSearch(self, dto: RegexDTO):
         data = dto.data
         sequence = dto.sequence
 
@@ -21,16 +23,22 @@ class regexService(Interface):
         else:
             print(f"Motif '{sequence}' not found in the DNA sequence.")
 
-    def SSRPatternSearch(self, dto: SSRDto):
-        ssr = []
+    def SSRSearch(self, dto: SSRDTO):
+        def ssrPatternSearch(sequence: str, length: int) -> list[Any]:
+            pattern = rf"(\w{{{length},{length}}})(?:\1)+"
+            matches = re.findall(pattern, sequence)
 
-        data = dto.data
-        repeat_length = int(dto.repeat_length)
+            return matches
 
-        pattern = f"({'A+'}|{'T+'}|{'C+'}|{'G+'}){{{repeat_length},}}"
-        matches = re.finditer(pattern, data)
+        resp = ResponseSSRDTO()
+        sequence = dto.sequence
+        resultDict = {}
 
-        for match in matches:
-            ssr.append(match.group())
-        
-        return ssr
+        # Make SSR search length max to 6
+        for i in range(2, 7):
+            res = ssrPatternSearch(sequence, i)
+            resultDict[str(i)] = res
+
+        resp.result = resultDict
+
+        return resp

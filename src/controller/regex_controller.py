@@ -1,6 +1,7 @@
 from flask import Blueprint, Response, request, json
 from http import HTTPStatus
-from src.dto.regex_dto import RegexDto, SSRDto
+
+from src.dto.regex_dto import RegexDTO, SSRDTO
 from src.service.regex import regexService
 
 regex = Blueprint("regex", __name__)
@@ -17,7 +18,7 @@ def handle_search() -> Response:
 
     else:
         data = request.json
-        dto = RegexDto(data)
+        dto = RegexDTO(data)
 
         if dto.is_valid() == False:
             return Response(
@@ -35,9 +36,9 @@ def handle_search() -> Response:
 
 
 @regex.route("ssr", methods=["POST"])
-def handle_test() -> Response:
+def handle_ssr() -> Response:
     data = request.json
-    dto = SSRDto(data)
+    dto = SSRDTO(data)
 
     if dto.is_valid() == False:
         return Response(
@@ -47,10 +48,20 @@ def handle_test() -> Response:
         )
 
     service = regexService()
-    response_data = service.SSRPatternSearch(dto)
+    response_data = service.SSRSearch(dto)
 
     return Response(
-        response=json.dumps({"res": response_data}),
+        response=json.dumps(
+            {
+                "res": {
+                    "2": response_data.result["2"],
+                    "3": response_data.result["3"],
+                    "4": response_data.result["4"],
+                    "5": response_data.result["5"],
+                    "6": response_data.result["6"],
+                },
+            },
+        ),
         status=200,
         mimetype="application/json",
     )

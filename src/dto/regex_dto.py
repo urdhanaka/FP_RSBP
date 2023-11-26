@@ -1,4 +1,4 @@
-class RegexDto:
+class RegexDTO:
     def __init__(self, json) -> None:
         self.data = ""
         self.sequence = ""
@@ -10,28 +10,32 @@ class RegexDto:
             self.sequence = json["sequence"]
 
     def is_valid(self) -> bool:
-        if self.data == "":
-            return False 
-        elif self.sequence == "":
+        if self.data == "" or self.sequence == "":
             return False
-        else:
-            return True
 
-class SSRDto:
+        return True
+
+
+class SSRDTO:
     def __init__(self, json) -> None:
-        self.data = ""
-        self.repeat_length = ""
+        self.sequence = ""
 
-        if "data" in json:
-            self.data = json["data"]
-
-        if "repeat_length" in json:
-            self.repeat_length = json["repeat_length"]
+        if "sequence" in json:
+            self.sequence = json["sequence"]
 
     def is_valid(self) -> bool:
-        if self.data == "":
-            return False 
-        if self.repeat_length == "":
-            return False 
-        else:
-            return True
+        if self.sequence == "":
+            return False
+
+        return True
+
+
+class ResponseSSRDTO:
+    def __init__(self) -> None:
+        self.result = {}
+
+    def is_valid(self) -> bool:
+        if self.result == {}:
+            return False
+
+        return True
