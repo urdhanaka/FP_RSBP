@@ -16,7 +16,7 @@ class RegexDTO:
         return True
 
 
-class SSRDTO:
+class SsrDTO:
     def __init__(self, json) -> None:
         self.sequence = ""
         self.pattern = []
@@ -44,3 +44,17 @@ class ResponseSSRDTO:
             return False
 
         return True
+
+
+class SSRResultDTO:
+    def __init__(self, pattern: str, is_found: bool, ssr: list) -> None:
+        self.pattern = pattern
+        if is_found == True:
+            self.is_found = f"Pattern {self.pattern} ditemukan"
+            self.ssr = ssr
+        else:
+            self.is_found = f"Pattern {self.pattern} tidak ditemukan"
+            self.ssr = []
+
+    def encode(self):
+        return self.__dict__

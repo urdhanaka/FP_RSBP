@@ -1,13 +1,13 @@
 import re
 from typing import Any
-from src.dto.regex_dto import SSRDTO, RegexDTO, ResponseSSRDTO
+from src.dto.regex_dto import SsrDTO, RegexDTO, ResponseSSRDTO, SSRResultDTO
 
 
 class Interface:
     def PatternSearch(self, _: RegexDTO):
         pass
 
-    def SSRSearch(self, _: SSRDTO):
+    def SSRSearch(self, _: SsrDTO):
         pass
 
 
@@ -24,7 +24,7 @@ class regexService(Interface):
             print(f"Motif '{sequence}' not found in the DNA sequence.")
 
     # temp, might delete soon
-    def SSRSearch(self, dto: SSRDTO):
+    def SSRSearch(self, dto: SsrDTO):
         def ssrPatternSearch(sequence: str, length: int) -> list[Any]:
             pattern = rf"(\w{{{length},{length}}})(?:\1)+"
             matches = re.findall(pattern, sequence)
@@ -44,17 +44,36 @@ class regexService(Interface):
 
         return resp
 
-    def PatternSSRSearch(self, dto: SSRDTO):
-        def ssrPatternSearch(sequence: str, pattern: str):
+    def PatternSSRSearch(self, dto: SsrDTO):
+        def ssrPatternSearch(sequence: str) -> list:
+            final_matches = []
+
+            for i in range(len(sequence) + 1):
+                pattern = rf"(\w{{{i+1},{i+1}}})(?:\1)+"
+                matches = re.findall(pattern, sequence)
+
+                for ssr in matches:
+                    final_matches.append(ssr)
+
+            return final_matches
+
+        def isPatternFound(sequence: str, pattern: str) -> bool:
             matches = re.findall(pattern, sequence)
 
-            return matches
+            if matches:
+                return True
+
+            return False
 
         sequence = dto.sequence
         resultList = []
 
         for pattern in dto.pattern:
-            res = ssrPatternSearch(sequence, pattern)
-            resultList.append(res)
+            isFound = isPatternFound(sequence, pattern)
+            ssr = ssrPatternSearch(pattern)
+
+            resultSSRDto = SSRResultDTO(pattern, isFound, ssr)
+
+            resultList.append(resultSSRDto)
 
         return resultList
