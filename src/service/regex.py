@@ -48,7 +48,7 @@ class regexService(Interface):
         def ssrPatternSearch(sequence: str) -> list:
             final_matches = []
 
-            for i in range(len(sequence) + 1):
+            for i in range(2, len(sequence) + 1):
                 pattern = rf"(\w{{{i+1},{i+1}}})(?:\1)+"
                 matches = re.findall(pattern, sequence)
 
