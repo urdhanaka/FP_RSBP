@@ -1,4 +1,4 @@
-import re
+import regex as re
 from typing import Any
 from src.dto.regex_dto import SsrDTO, RegexDTO, ResponseSSRDTO, SSRResultDTO
 
@@ -48,9 +48,9 @@ class regexService(Interface):
         def ssrPatternSearch(sequence: str) -> list:
             final_matches = []
 
-            for i in range(2, len(sequence) + 1):
-                pattern = rf"(\w{{{i+1},{i+1}}})(?:\1)+"
-                matches = re.findall(pattern, sequence)
+            for i in range(1, len(sequence)):
+                pattern = rf"(\w{{{i},{i}}})(?:\1)+"
+                matches = re.findall(pattern, sequence, overlapped=True)
 
                 for ssr in matches:
                     final_matches.append(ssr)

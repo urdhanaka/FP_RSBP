@@ -25,8 +25,11 @@ class SsrDTO:
             self.sequence = json["sequence"]
 
         if "pattern" in json:
-            for pattern in json["pattern"]:
-                self.pattern.append(pattern)
+            if isinstance(json["pattern"], list):
+                for pattern in json["pattern"]:
+                    self.pattern.append(pattern)
+            else:
+                self.pattern.append(json["pattern"])
 
     def is_valid(self) -> bool:
         if self.sequence == "" or self.pattern == []:
