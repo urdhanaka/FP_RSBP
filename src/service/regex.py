@@ -48,7 +48,7 @@ class regexService(Interface):
         def ssrPatternSearch(sequence: str) -> list:
             final_matches = []
 
-            for i in range(1, len(sequence)):
+            for i in range(2, len(sequence)):
                 pattern = rf"(\w{{{i},{i}}})(?:\1)+"
                 matches = re.findall(pattern, sequence, overlapped=True)
 
@@ -57,22 +57,23 @@ class regexService(Interface):
 
             return final_matches
 
-        def isPatternFound(sequence: str, pattern: str) -> bool:
-            matches = re.findall(pattern, sequence)
+        def isPatternFound(sequence: str, pattern: str) -> list:
+            matches = re.findall(pattern, sequence, overlapped=True)
 
-            if matches:
-                return True
-
-            return False
+            return matches
 
         sequence = dto.sequence
         resultList = []
 
         for pattern in dto.pattern:
-            isFound = isPatternFound(sequence, pattern)
+            foundPattern = isPatternFound(sequence, pattern)
             ssr = ssrPatternSearch(pattern)
+            isFound = False
 
-            resultSSRDto = SSRResultDTO(pattern, isFound, ssr)
+            if foundPattern:
+                isFound = True
+
+            resultSSRDto = SSRResultDTO(pattern, isFound, len(foundPattern), ssr)
 
             resultList.append(resultSSRDto)
 

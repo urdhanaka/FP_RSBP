@@ -50,13 +50,15 @@ class ResponseSSRDTO:
 
 
 class SSRResultDTO:
-    def __init__(self, pattern: str, is_found: bool, ssr: list) -> None:
+    def __init__(self, pattern: str, is_found: bool, count: int, ssr: list) -> None:
         self.pattern = pattern
         if is_found == True:
             self.is_found = f"Pattern {self.pattern} ditemukan"
+            self.count = count
             self.ssr = ssr
         else:
             self.is_found = f"Pattern {self.pattern} tidak ditemukan"
+            self.count = count
             self.ssr = []
 
     def encode(self):
