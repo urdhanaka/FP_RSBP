@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regex Search</title>
+</head>
+<body>
+
+<h1>Regex Search</h1>
+
+<div id="searchResult">
+    <table>
+    <th>
+        <td>Pattern</td>
+        <td>Found</td>
+        <td>Count</td>
+        <td>SSR</td>
+    </th>
+    <?php
+    $url = file_get_contents('http://127.0.0.1:5000/api/regex/ssr_new);
+
+    $json = json_decode($url);
+
+    foreach ($json as $item) { 
+        echo "<tr>"
+        echo "<td>$item->pattern</td>"
+        echo "<td>$item->is_found</td>"
+        echo "<td>$item->count</td>"
+        echo "<td>$item->ssr</td>"
+        echo "</tr>"
+        $urlPoster[]=$value->urlPoster;
+    }
+    ?>
+    </table>
+</div>
+
+</body>
+</html>
