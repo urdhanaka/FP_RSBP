@@ -4,11 +4,17 @@ from src.dto.regex_dto import SsrDTO, RegexDTO, ResponseSSRDTO, SSRResultDTO
 
 
 class Interface:
-    def PatternSearch(self, _: RegexDTO):
+    def PatternSearch(self, dto: RegexDTO):
+        _ = dto
         pass
 
-    def SSRSearch(self, _: SsrDTO):
-        pass
+    def SSRSearch(self, dto: SsrDTO) -> ResponseSSRDTO:
+        _ = dto
+        return ResponseSSRDTO()
+
+    def PatternSSRSearch(self, dto: SsrDTO) -> list[SSRResultDTO]:
+        _ = dto
+        return []
 
 
 class regexService(Interface):
