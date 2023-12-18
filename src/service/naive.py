@@ -9,50 +9,34 @@ class Interface:
 
 class naiveService(Interface):
     def PatternSSRSearch(self, dto: SsrDTO):
-        def ssrPatternSearch(sequence: str) -> list:
-            sequence_length = len(sequence)
-
-            final_matches = []
-
-            for i in range(2, sequence_length // 2 + 1):
-                temp_string = sequence[:i] + sequence[:i]
-
-                if temp_string in sequence:
-                    final_matches.append(sequence[:i])
-
-            return final_matches
-
-        def isPatternFound(sequence: str, pattern: str) -> list:
+        def ssrPatternSearch(sequence: str, pattern: str) -> list:
             sequence_length = len(sequence)
             pattern_length = len(pattern)
 
-            matches = []
+            final_matches = []
 
-            for i in range(sequence_length - pattern_length + 1):
-                j = 0
+            for i in range(sequence_length-pattern_length+1):
+                checked_string = sequence[i : i + pattern_length]
 
-                while j < pattern_length:
-                    if sequence[i + j] != pattern[j]:
-                        break
-                    j += 1
+                if checked_string != pattern:
+                    continue
 
-                if j == pattern_length:
-                    matches.append(pattern)
+                final_matches.append(i + 1)
 
-            return matches
+            return final_matches
 
         sequence = dto.sequence
         resultList = []
 
         for pattern in dto.pattern:
-            foundPattern = isPatternFound(sequence, pattern)
-            ssr = ssrPatternSearch(pattern)
-            isFound = False
+            matched = ssrPatternSearch(sequence, pattern)
 
-            if foundPattern:
+            if matched:
                 isFound = True
+            else:
+                isFound = False
 
-            resultSSRDto = SSRResultDTO(pattern, isFound, len(foundPattern), ssr)
+            resultSSRDto = SSRResultDTO(pattern, isFound, len(matched), matched)
 
             resultList.append(resultSSRDto)
 

@@ -1,85 +1,37 @@
 import regex as re
-from typing import Any
-from src.dto.regex_dto import SsrDTO, RegexDTO, ResponseSSRDTO, SSRResultDTO
+from src.dto.regex_dto import SsrDTO, SSRResultDTO
 
 
 class Interface:
-    def PatternSearch(self, dto: RegexDTO):
-        _ = dto
-        pass
-
-    def SSRSearch(self, dto: SsrDTO) -> ResponseSSRDTO:
-        _ = dto
-        return ResponseSSRDTO()
-
     def PatternSSRSearch(self, dto: SsrDTO) -> list[SSRResultDTO]:
         _ = dto
         return []
 
 
 class regexService(Interface):
-    def PatternSearch(self, dto: RegexDTO):
-        data = dto.data
-        sequence = dto.sequence
-
-        matches = [match.start() for match in re.finditer(sequence, data)]
-
-        if matches:
-            print(f"Motif '{sequence}' found at positions: {matches}")
-        else:
-            print(f"Motif '{sequence}' not found in the DNA sequence.")
-
-    # temp, might delete soon
-    def SSRSearch(self, dto: SsrDTO):
-        def ssrPatternSearch(sequence: str, length: int) -> list[Any]:
-            pattern = rf"(\w{{{length},{length}}})(?:\1)+"
-            matches = re.findall(pattern, sequence)
-
-            return matches
-
-        resp = ResponseSSRDTO()
-        sequence = dto.sequence
-        resultDict = {}
-
-        # Make SSR search length max to 6
-        for i in range(2, 7):
-            res = ssrPatternSearch(sequence, i)
-            resultDict[str(i)] = res
-
-        resp.result = resultDict
-
-        return resp
-
     def PatternSSRSearch(self, dto: SsrDTO):
-        def ssrPatternSearch(sequence: str) -> list:
+        def ssrPatternSearch(sequence: str, pattern: str) -> list:
             final_matches = []
 
-            for i in range(2, len(sequence)):
-                pattern = rf"(\w{{{i},{i}}})(?:\1)+"
-                matches = re.findall(pattern, sequence, overlapped=True)
+            matches = re.finditer(pattern, sequence, overlapped=True)
 
-                for ssr in matches:
-                    final_matches.append(ssr)
+            for position in matches:
+                final_matches.append(position.start()+1)
 
             return final_matches
-
-        def isPatternFound(sequence: str, pattern: str) -> list:
-            matches = re.findall(pattern, sequence, overlapped=True)
-
-            return matches
 
         sequence = dto.sequence
         resultList = []
 
         for pattern in dto.pattern:
-            foundPattern = isPatternFound(sequence, pattern)
-            ssr = ssrPatternSearch(pattern)
-            isFound = False
+            matched = ssrPatternSearch(sequence, pattern)
 
-            if foundPattern:
+            if matched:
                 isFound = True
+            else:
+                isFound = False
 
-            resultSSRDto = SSRResultDTO(pattern, isFound, len(foundPattern), ssr)
+            resultSSRDto = SSRResultDTO(pattern, isFound, len(matched), matched)
 
             resultList.append(resultSSRDto)
 
