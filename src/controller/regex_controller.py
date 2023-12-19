@@ -1,4 +1,4 @@
-from flask import Blueprint, Response, request
+from flask import Blueprint, Response, request, render_template
 from http import HTTPStatus
 
 from src.dto.regex_dto import RegexDTO, SsrDTO
@@ -69,25 +69,29 @@ def handle_ssr_new() -> Response:
     )
 
 
-@regex.route("ssr_new", methods=["POST"])
+@regex.route("ssr_new", methods=["POST", "GET"])
 def handle_ssr() -> Response:
-    data = request.json
-    dto = SsrDTO(data)
+    if request.method == "GET":
+        data = request.json
+        return render_template("result.html", data=data)
+    else:
+        data = request.json
+        dto = SsrDTO(data)
 
-    if dto.is_valid() == False:
+        if dto.is_valid() == False:
+            return Response(
+                response=json.dumps({"status": "request not satisfied"}),
+                status=HTTPStatus.BAD_REQUEST,
+                mimetype="application/json",
+            )
+
+        service = regexService()
+        response_data = service.PatternSSRSearch(dto)
+
+        response_json = json.dumps(response_data, default=lambda o: o.encode(), indent=4)
+
         return Response(
-            response=json.dumps({"status": "request not satisfied"}),
-            status=HTTPStatus.BAD_REQUEST,
+            response=response_json,
+            status=200,
             mimetype="application/json",
         )
-
-    service = regexService()
-    response_data = service.PatternSSRSearch(dto)
-
-    response_json = json.dumps(response_data, default=lambda o: o.encode(), indent=4)
-
-    return Response(
-        response=response_json,
-        status=200,
-        mimetype="application/json",
-    )

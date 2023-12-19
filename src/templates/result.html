@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regex Search</title>
+</head>
+<body>
+
+<h1>Regex Search</h1>
+
+<div id="searchResult">
+    <table>
+    <th>
+        <td>Pattern</td>
+        <td>Found</td>
+        <td>Count</td>
+        <td>SSR</td>
+    </th>
+    {% for dt in data %}
+        <tr>
+            <td>{{ dt['pattern'] }}</td>
+            <td>{{ dt['pattern'] }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+</div>
+
+</body>
+</html>
