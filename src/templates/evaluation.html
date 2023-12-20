@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="`en">
+  <head>
+    <title>Evaluation Result</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+      table, th, td {
+        border: 1px solid black;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Evaluation Result</h1>
+    <p>Sequence: {{ data["sequence"] }}</p>
+    <table style="width:100%">
+      <thead>
+        <tr>
+          <th>Algorithm</th>
+          <th>Pattern</th>
+          <th>Count</th>
+          <th>Time</th>
+        </tr>
+        {% for results in data["result"] %}
+        {% for key, value in results.items() %}
+        {% for temp in value %}
+        <tr>
+          <td>{{ key }}</td>
+          <td>{{ temp["pattern"] }}</td>
+          <td>{{ temp["count"] }}</td>
+          <td>{{ temp["timed"] }}</td>
+        </tr>
+        {% endfor %}
+        {% endfor %}
+        {% endfor %}
+      </thead>
+    </table>
+  </body>
+</html>

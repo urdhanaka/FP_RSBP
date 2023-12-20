@@ -22,7 +22,7 @@ def handle_search() -> Response:
         )
 
     service = boyerMooreService(dto)
-    response_data = service.boyer_moore_search()
+    response_data = service.search()
     response_json = json.dumps(response_data, default=lambda o: o.encode(), indent=4)
 
     return Response(
