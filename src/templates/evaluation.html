@@ -12,7 +12,9 @@
   </head>
   <body>
     <h1>Evaluation Result</h1>
-    <p>Sequence: {{ data["sequence"] }}</p>
+    <div style="word-wrap: break-word;">
+      <p>Sequence: {{ data["sequence"] }}</p>
+    </div>
     <table style="width:100%">
       <thead>
         <tr>
@@ -20,6 +22,7 @@
           <th>Pattern</th>
           <th>Count</th>
           <th>Time</th>
+          <th>Position</th>
         </tr>
         {% for results in data["result"] %}
         {% for key, value in results.items() %}
@@ -29,6 +32,7 @@
           <td>{{ temp["pattern"] }}</td>
           <td>{{ temp["count"] }}</td>
           <td>{{ temp["timed"] }}</td>
+          <td>{{ temp["position"] }}</td>
         </tr>
         {% endfor %}
         {% endfor %}
