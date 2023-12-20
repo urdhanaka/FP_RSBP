@@ -2,14 +2,14 @@ from flask import Blueprint, Response, request
 from http import HTTPStatus
 
 from src.dto.regex_dto import SsrDTO
-from src.service.naive import naiveService
+from src.service.boyer_moore import boyerMooreService
 
 import json
 
-naive = Blueprint("naive", __name__)
+boyer_moore = Blueprint("boyer_moore", __name__)
 
 
-@naive.route("/", methods=["GET", "POST"])
+@boyer_moore.route("", methods=["GET", "POST"])
 def handle_search() -> Response:
     data = request.json
     dto = SsrDTO(data)
@@ -21,9 +21,8 @@ def handle_search() -> Response:
             mimetype="application/json",
         )
 
-    service = naiveService(dto)
-    response_data = service.search()
-
+    service = boyerMooreService(dto)
+    response_data = service.boyer_moore_search()
     response_json = json.dumps(response_data, default=lambda o: o.encode(), indent=4)
 
     return Response(

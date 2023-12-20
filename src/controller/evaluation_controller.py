@@ -1,15 +1,13 @@
-from flask import Blueprint, Response, request
 from http import HTTPStatus
+from flask import Blueprint, Response, json, request
 
 from src.dto.regex_dto import SsrDTO
-from src.service.naive import naiveService
+from src.service.evaluation import evaluationService
 
-import json
-
-naive = Blueprint("naive", __name__)
+eval_func = Blueprint("eval_func", __name__)
 
 
-@naive.route("/", methods=["GET", "POST"])
+@eval_func.route("/", methods=["GET"])
 def handle_search() -> Response:
     data = request.json
     dto = SsrDTO(data)
@@ -21,9 +19,8 @@ def handle_search() -> Response:
             mimetype="application/json",
         )
 
-    service = naiveService(dto)
-    response_data = service.search()
-
+    service = evaluationService(dto)
+    response_data = service.evaluation()
     response_json = json.dumps(response_data, default=lambda o: o.encode(), indent=4)
 
     return Response(

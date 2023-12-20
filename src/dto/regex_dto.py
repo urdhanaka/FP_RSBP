@@ -1,5 +1,8 @@
+from typing import Any
+
+
 class SsrDTO:
-    def __init__(self, json) -> None:
+    def __init__(self, json: Any) -> None:
         self.sequence = ""
         self.pattern = []
 
@@ -21,16 +24,18 @@ class SsrDTO:
 
 
 class SSRResultDTO:
-    def __init__(self, pattern: str, is_found: bool, count: int, position: list) -> None:
+    def __init__(self, pattern: str, is_found: bool, count: int, position: list, timed: str = "") -> None:
         self.pattern = pattern
         if is_found == True:
             self.is_found = f"Pattern {self.pattern} ditemukan"
             self.count = count
             self.position = position
+            self.timed = timed
         else:
             self.is_found = f"Pattern {self.pattern} tidak ditemukan"
             self.count = count
             self.position = []
+            self.timed = timed
 
     def encode(self):
         return self.__dict__

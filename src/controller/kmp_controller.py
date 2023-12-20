@@ -2,14 +2,14 @@ from flask import Blueprint, Response, request
 from http import HTTPStatus
 
 from src.dto.regex_dto import SsrDTO
-from src.service.naive import naiveService
+from src.service.kmp import kmpService
 
 import json
 
-naive = Blueprint("naive", __name__)
+kmp = Blueprint("kmp", __name__)
 
 
-@naive.route("/", methods=["GET", "POST"])
+@kmp.route("", methods=["GET", "POST"])
 def handle_search() -> Response:
     data = request.json
     dto = SsrDTO(data)
@@ -21,9 +21,8 @@ def handle_search() -> Response:
             mimetype="application/json",
         )
 
-    service = naiveService(dto)
-    response_data = service.search()
-
+    service = kmpService(dto)
+    response_data = service.kmp_search()
     response_json = json.dumps(response_data, default=lambda o: o.encode(), indent=4)
 
     return Response(

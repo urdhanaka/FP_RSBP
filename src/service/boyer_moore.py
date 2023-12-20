@@ -1,7 +1,6 @@
 import time
 from typing import Any
-import regex as re
-from src.dto.regex_dto import SsrDTO, SSRResultDTO
+from src.dto.regex_dto import SSRResultDTO, SsrDTO
 
 
 class Interface:
@@ -9,19 +8,46 @@ class Interface:
         pass
 
 
-class regexService(Interface):
+class boyerMooreService(Interface):
     def __init__(self, dto: SsrDTO) -> None:
         self.sequence = dto.sequence
         self.pattern = dto.pattern
 
     def search(self, timed=False):
+        def bad_char(pattern: str):
+            # ord() of all alphabet (a-zA-Z) is around 122-123
+            # make the size fo the list to 128
+            bar_char_list = [-1] * (128)
+
+            for i in range(len(pattern)):
+                bar_char_list[ord(pattern[i])] = i
+
+            return bar_char_list
+
         def matched_string(sequence: str, pattern: str) -> list:
+            sequence_length = len(sequence)
+            pattern_length = len(pattern)
+
+            bad_char_list = bad_char(pattern)
             final_matches = []
 
-            matches = re.finditer(pattern, sequence, overlapped=True)
+            i = 0
+            while i <= sequence_length - pattern_length:
+                j = pattern_length - 1
 
-            for position in matches:
-                final_matches.append(position.start() + 1)
+                while j >= 0 and pattern[j] == sequence[i + j]:
+                    j -= 1
+
+                if j < 0:
+                    final_matches.append(i + 1)
+                    i += (
+                        pattern_length
+                        - bad_char_list[ord(sequence[i + pattern_length])]
+                        if i + pattern_length < sequence_length
+                        else 1
+                    )
+                else:
+                    i += max(1, j - bad_char_list[ord(sequence[i + j])])
 
             return final_matches
 

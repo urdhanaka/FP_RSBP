@@ -21,10 +21,9 @@ def handle_ssr() -> Response:
             mimetype="application/json",
         )
 
-    service = regexService()
-    response_data = service.PatternSSRSearch(dto)
-
-    response_json = json.dumps(response_data, default=lambda o: o.encode(), indent=1)
+    service = regexService(dto)
+    response_data = service.search()
+    response_json = json.dumps(response_data, default=lambda o: o.encode(), indent=4)
 
     return Response(
         response=response_json,
